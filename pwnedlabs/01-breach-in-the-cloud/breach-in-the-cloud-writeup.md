@@ -1,7 +1,7 @@
 # Breach in the Cloud — PwnedLabs Writeup
 **Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
 **Tags:** `AWS` `CloudTrail` `IAM` `S3` `Privilege Escalation` `Incident Response`  
-**Date Solved:** April 2026 | **Approach:** Purple Team (Red + Blue)
+**Approach:** Purple Team (Red + Blue)
 
 ---
 
@@ -396,4 +396,4 @@ aws iam list-roles | grep -i admin
 
 ---
 
-*Solved by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
+*by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
