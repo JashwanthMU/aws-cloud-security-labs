@@ -401,7 +401,7 @@ aws guardduty update-detector \
 
 ## 7. Remediation
 
-### Immediate (within 1 hour of detection)
+### Immediate 
 
 ```bash
 # 1. Make the EBS snapshot private IMMEDIATELY
@@ -431,7 +431,7 @@ aws ec2 describe-snapshots \
     --snapshot-id {} --attribute createVolumePermission
 ```
 
-### Short-Term (within 24 hours)
+### Short-Term 
 
 **Serve S3 assets through CloudFront instead of direct S3 URLs:**
 ```bash
@@ -474,7 +474,7 @@ aws cloudtrail put-event-selectors \
   }]'
 ```
 
-### Long-Term (within 1 week)
+### Long-Term 
 
 **Automated EBS snapshot visibility audit (run weekly):**
 ```bash
