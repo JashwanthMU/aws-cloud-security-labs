@@ -391,7 +391,7 @@ grep '"objectKey"' *.json | grep -i "export\|credentials\|secrets\|password\|fla
 
 ## 6. Remediation
 
-### Immediate (within 1 hour of detection)
+### Immediate 
 
 ```bash
 # 1. Rotate ALL leaked credentials immediately
@@ -418,7 +418,7 @@ aws cloudtrail lookup-events \
   --start-time 2023-10-01T00:00:00Z
 ```
 
-### Short-Term (within 24 hours)
+### Short-Term
 
 **Move secrets to AWS Secrets Manager (the right fix):**
 ```bash
@@ -475,7 +475,7 @@ aws s3api put-bucket-encryption \
   }'
 ```
 
-### Long-Term (within 1 week)
+### Long-Term
 
 **1. Add secrets scanning to your CI/CD pipeline:**
 ```yaml
