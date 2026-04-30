@@ -1,6 +1,5 @@
 # AWS S3 Enumeration Basics — PwnedLabs Writeup
-**Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
-**Tags:** `AWS` `S3` `Enumeration` `Hardcoded Credentials` `IAM` `Privilege Escalation` `Data Exfiltration`   
+ 
 **Lab URL:** https://pwnedlabs.io/labs/aws-s3-enumeration-basics
 
 ---
@@ -626,4 +625,3 @@ This lab mirrors multiple real-world incidents:
 
 ---
 
-by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
