@@ -1,5 +1,4 @@
-# Identify the AWS Account ID from a Public S3 Bucket — PwnedLabs Writeup
-**Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
+# Identify the AWS Account ID from a Public S3 Bucket — PwnedLabs Writeup  
 **Tags:** `AWS` `S3` `Reconnaissance` `Account ID Enumeration` `EBS Snapshots` `s3:ResourceAccount` `OSINT`   
 **Lab URL:** https://pwnedlabs.io/labs/identify-the-aws-account-id-from-a-public-s3-bucket
 
@@ -642,4 +641,3 @@ aws ec2 describe-snapshots --owner-ids self \
 
 ---
 
-by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
