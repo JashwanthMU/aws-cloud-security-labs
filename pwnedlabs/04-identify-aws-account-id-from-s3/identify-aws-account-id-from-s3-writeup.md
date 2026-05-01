@@ -518,7 +518,7 @@ trufflehog github --repo https://github.com/your-org/your-repo
 
 ---
 
-## 8. Real-World Playbook — If This Happens at Your Company
+## 8. Real-World Playbook 
 
 > Your incident response guide for account ID exposure and public snapshot discovery.
 
