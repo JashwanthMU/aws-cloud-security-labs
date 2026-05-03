@@ -1,6 +1,5 @@
 # AWS S3 Enumeration Basics — PwnedLabs Writeup
-**Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
-**Tags:** `AWS` `S3` `Enumeration` `Hardcoded Credentials` `IAM` `Privilege Escalation` `Data Exfiltration`   
+ 
 **Lab URL:** https://pwnedlabs.io/labs/aws-s3-enumeration-basics
 
 ---
@@ -418,7 +417,11 @@ aws cloudtrail lookup-events \
   --start-time 2023-10-01T00:00:00Z
 ```
 
+<<<<<<< HEAD
 ### Short-Term
+=======
+### Short-Term 
+>>>>>>> e156fd39751ff7d571222036d5b5a41b3f561f2a
 
 **Move secrets to AWS Secrets Manager (the right fix):**
 ```bash
@@ -475,7 +478,11 @@ aws s3api put-bucket-encryption \
   }'
 ```
 
+<<<<<<< HEAD
 ### Long-Term
+=======
+### Long-Term 
+>>>>>>> e156fd39751ff7d571222036d5b5a41b3f561f2a
 
 **1. Add secrets scanning to your CI/CD pipeline:**
 ```yaml
@@ -626,4 +633,3 @@ This lab mirrors multiple real-world incidents:
 
 ---
 
-by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*

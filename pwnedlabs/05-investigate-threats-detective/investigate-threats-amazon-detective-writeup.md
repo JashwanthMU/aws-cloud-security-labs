@@ -1,7 +1,5 @@
-# Investigate Threats with Amazon Detective — PwnedLabs Writeup
-**Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
-**Tags:** `AWS` `Amazon Detective` `GuardDuty` `CloudTrail` `VPC Flow Logs` `Threat Investigation` `Incident Response` `Blue Team`  
-**Date Solved:** May 2026 | **Approach:** Blue Team (Threat Investigation)  
+# Investigate Threats with Amazon Detective — PwnedLabs Writeup 
+**Tags:** `AWS` `Amazon Detective` `GuardDuty` `CloudTrail` `VPC Flow Logs` `Threat Investigation` `Incident Response` `Blue Team`   
 **Lab URL:** https://pwnedlabs.io/labs/investigate-threats-with-amazon-detective
 
 ---
@@ -44,7 +42,7 @@ This lab teaches you how real SOC analysts and cloud security engineers investig
             → [Examine Source IPs — Geolocation + Threat Intel]
                 → [Inspect VPC Flow Logs — Network Behaviour]
                     → [Review Finding Groups — Related Activity]
-                        → [Timeline Reconstructed] → [Scope Confirmed] ✅
+                        → [Timeline Reconstructed] → [Scope Confirmed] 
 ```
 
 ---
@@ -144,7 +142,7 @@ Time:            [Timestamp of first occurrence]
 **What this finding means:**  
 EC2 instance credentials (from the instance metadata service — IMDS) were used to make API calls from **outside AWS infrastructure**. This is a strong indicator that an attacker stole the instance's IAM role credentials and is now using them from their own machine.
 
-> 💡 EC2 instance credentials should only ever be used from within the EC2 instance itself. If you see them used from an external IP, that is a near-certain indication of credential theft via SSRF or direct instance compromise.
+>  EC2 instance credentials should only ever be used from within the EC2 instance itself. If you see them used from an external IP, that is a near-certain indication of credential theft via SSRF or direct instance compromise.
 
 **Pivot to Detective:**  
 Click **"Investigate in Detective"** on the finding detail pane. Detective opens directly to a curated investigation view for this specific finding.
@@ -169,7 +167,7 @@ Lists all entities connected to this finding:
 - The external IP address
 - AWS services that were called
 
-> 💡 This is Detective's core power — it automatically surfaces all entities connected to a finding so you don't have to manually correlate CloudTrail logs. What would take hours of `grep` and `jq` is presented visually in seconds.
+>  This is Detective's core power — it automatically surfaces all entities connected to a finding so you don't have to manually correlate CloudTrail logs. What would take hours of `grep` and `jq` is presented visually in seconds.
 
 ---
 
@@ -192,7 +190,7 @@ Detective shows a world map with the source IPs for all API calls made by this r
 
 **Finding:** The overwhelming majority of legitimate calls originate from the EC2 instance's IP (an AWS internal IP in `us-east-1`). A new source IP appears from an entirely different country — this is the external attacker using the stolen credentials.
 
-> 🚩 "New Geolocations" in Detective is one of the most powerful quick-triage signals. A role or user that has always called APIs from `us-east-1` suddenly appearing from Eastern Europe or Southeast Asia is immediately suspicious.
+>  "New Geolocations" in Detective is one of the most powerful quick-triage signals. A role or user that has always called APIs from `us-east-1` suddenly appearing from Eastern Europe or Southeast Asia is immediately suspicious.
 
 **Observed With panel:**
 
@@ -245,7 +243,7 @@ Finding 4: Impact:S3/ObjectRead.Unusual
            → Unusual volume of S3 object reads
 ```
 
-> 💡 If GuardDuty tells you *"there's a fire"*, Finding Groups tells you *"the fire started in the kitchen, spread to the living room, and here's every room it touched."* Without Finding Groups, a SOC analyst might investigate each finding in isolation and miss that they are all part of a single coordinated attack chain.
+>  If GuardDuty tells you *"there's a fire"*, Finding Groups tells you *"the fire started in the kitchen, spread to the living room, and here's every room it touched."* Without Finding Groups, a SOC analyst might investigate each finding in isolation and miss that they are all part of a single coordinated attack chain.
 
 **The Finding Group visualization:**
 
@@ -290,7 +288,7 @@ After completing all entity profiles and reviewing the Finding Group, we can ans
 | **What was accessed?** | S3 buckets enumerated and objects read; IAM permissions probed; EC2 instances described |
 | **What is the blast radius?** | The `HugeLogisticsAppRole` and all resources it had access to — S3 buckets, IAM read permissions, EC2 describe access |
 
-**Flag retrieved from the Detective investigation.** ✅
+**Flag retrieved from the Detective investigation.** 
 
 ---
 
@@ -298,19 +296,19 @@ After completing all entity profiles and reviewing the Finding Group, we can ans
 
 | # | Root Cause | Severity |
 |---|-----------|---------|
-| 1 | EC2 instance role credentials (`HugeLogisticsAppRole`) exfiltrated and used from an external IP — IMDS v1 (IMDSv1) likely enabled, allowing SSRF-based credential theft without authentication | 🔴 Critical |
-| 2 | `HugeLogisticsAppRole` had overly broad permissions — attacker could enumerate S3, IAM, and EC2 from a single role | 🔴 Critical |
-| 3 | No IMDSv2 enforced on the EC2 instance — IMDSv1 allows any process on the instance (and SSRF vulnerabilities) to fetch credentials without a token | 🔴 Critical |
-| 4 | No CloudWatch alarm on `InstanceCredentialExfiltration` GuardDuty finding type — detection relied on manual review | 🟠 High |
-| 5 | Role had no IP condition restricting API calls to AWS IP ranges only | 🟠 High |
-| 6 | No VPC endpoint policies to restrict which services the role could reach from within the VPC | 🟡 Medium |
-| 7 | Detective and GuardDuty enabled but no automated response (Lambda/EventBridge) to contain on finding | 🟡 Medium |
+| 1 | EC2 instance role credentials (`HugeLogisticsAppRole`) exfiltrated and used from an external IP — IMDS v1 (IMDSv1) likely enabled, allowing SSRF-based credential theft without authentication |   Critical |
+| 2 | `HugeLogisticsAppRole` had overly broad permissions — attacker could enumerate S3, IAM, and EC2 from a single role |   Critical |
+| 3 | No IMDSv2 enforced on the EC2 instance — IMDSv1 allows any process on the instance (and SSRF vulnerabilities) to fetch credentials without a token |   Critical |
+| 4 | No CloudWatch alarm on `InstanceCredentialExfiltration` GuardDuty finding type — detection relied on manual review |   High |
+| 5 | Role had no IP condition restricting API calls to AWS IP ranges only |   High |
+| 6 | No VPC endpoint policies to restrict which services the role could reach from within the VPC |  Medium |
+| 7 | Detective and GuardDuty enabled but no automated response (Lambda/EventBridge) to contain on finding |   Medium |
 
 ---
 
 ## 6. Remediation
 
-### Immediate (within 1 hour of detection)
+### Immediate 
 
 ```bash
 # 1. Revoke all active sessions for the compromised role
@@ -370,7 +368,7 @@ aws ec2 modify-instance-metadata-defaults \
   --http-put-response-hop-limit 1
 ```
 
-> 💡 IMDSv2 requires a session token to retrieve instance credentials. SSRF attacks cannot include the required PUT request to get the token, so they fail silently. This single change eliminates the most common EC2 credential theft vector.
+>  IMDSv2 requires a session token to retrieve instance credentials. SSRF attacks cannot include the required PUT request to get the token, so they fail silently. This single change eliminates the most common EC2 credential theft vector.
 
 **Add an IP condition to the role trust policy — restrict API calls to AWS IPs only:**
 
@@ -405,7 +403,7 @@ aws iam get-service-last-accessed-details --job-id [job-id]
 # Remove all permissions for services not accessed in the last 90 days
 ```
 
-### Long-Term (within 1 week)
+### Long-Term 
 
 **Automated response — EventBridge + Lambda to auto-contain on critical GuardDuty findings:**
 
@@ -464,15 +462,15 @@ aws detective list-members --graph-arn arn:aws:detective:us-east-1:794929857501:
 
 | Signal | Source | Urgency |
 |--------|--------|---------|
-| GuardDuty: `UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.OutsideAWS` | GuardDuty | 🔴 Immediate — auto-contain |
-| Detective: New geolocation for IAM role/user in last 24h | Amazon Detective | 🔴 Immediate |
-| Detective: API call volume 10x above baseline for any entity | Amazon Detective | 🔴 Immediate |
-| Detective: IP flagged in threat intelligence feeds accessing your account | Amazon Detective | 🔴 Immediate |
-| GuardDuty: `Recon:IAMUser/UserPermissions` — credential enumeration | GuardDuty | 🟠 High |
-| GuardDuty: `Discovery:S3/BucketEnumeration.Unusual` | GuardDuty | 🟠 High |
-| EC2 IMDS endpoint receiving unusual volume of GET requests | CloudWatch | 🟠 High |
+| GuardDuty: `UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.OutsideAWS` | GuardDuty |   Immediate — auto-contain |
+| Detective: New geolocation for IAM role/user in last 24h | Amazon Detective |   Immediate |
+| Detective: API call volume 10x above baseline for any entity | Amazon Detective |   Immediate |
+| Detective: IP flagged in threat intelligence feeds accessing your account | Amazon Detective |   Immediate |
+| GuardDuty: `Recon:IAMUser/UserPermissions` — credential enumeration | GuardDuty |   High |
+| GuardDuty: `Discovery:S3/BucketEnumeration.Unusual` | GuardDuty |   High |
+| EC2 IMDS endpoint receiving unusual volume of GET requests | CloudWatch |   High |
 
-### Incident Response Steps (Production)
+### Incident Response Steps 
 
 ```
 1. TRIAGE    → Open GuardDuty finding, pivot to Detective, confirm true vs false positive
@@ -551,7 +549,7 @@ aws lambda list-functions \
 
 **The IMDS Problem at Scale:** AWS research has shown that a significant percentage of EC2 instances in production environments still run with IMDSv1 enabled — meaning SSRF-to-credential-theft is a viable attack against a large portion of AWS infrastructure. The fix (IMDSv2) is one CLI command per instance, yet it remains one of the most common unpatched misconfigurations security teams find during cloud assessments.
 
-> 🔗 **MITRE ATT&CK Mapping:**
+>  **MITRE ATT&CK Mapping:**
 > - T1552.005 — Unsecured Credentials: Cloud Instance Metadata API
 > - T1078.004 — Valid Accounts: Cloud Accounts
 > - T1530 — Data from Cloud Storage
@@ -592,4 +590,3 @@ aws lambda list-functions \
 
 ---
 
-*Solved by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*

@@ -1,6 +1,4 @@
-# Intro to AWS IAM Enumeration — PwnedLabs Writeup
-**Author:** Jashwanth | **Platform:** PwnedLabs | **Difficulty:** Beginner  
-**Tags:** `AWS` `IAM` `Enumeration` `AssumeRole` `Secrets Manager` `GuardDuty` `Privilege Escalation`  
+# Intro to AWS IAM Enumeration — PwnedLabs Writeup 
 **Lab URL:** https://pwnedlabs.io/labs/intro-to-aws-iam-enumeration
 
 ---
@@ -745,4 +743,3 @@ aws iam put-user-policy \
 
 ---
 
-by Jashwanth | [GitHub](https://github.com/JashwanthMU) | Part of the `aws-cloud-security-labs` writeup series*
