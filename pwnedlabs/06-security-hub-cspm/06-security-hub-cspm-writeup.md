@@ -1,4 +1,4 @@
-# Lab 06 — Reveal Hidden Risks with AWS Security Hub (CSPM)
+# Lab 06  Reveal Hidden Risks with AWS Security Hub (CSPM)
 **Platform:** PwnedLabs | **Difficulty:** Beginner | **Category:** Blue Team / Posture Management  
 **Tags:** `AWS` `Security Hub` `CSPM` `CIS Benchmark` `Misconfigurations` `Compliance`  
 **Date:** May 2026  
@@ -6,17 +6,17 @@
 
 ---
 
-This lab was different from the previous ones. Until now everything was either "you're the attacker" or "here are the logs, find what happened." This one was more like — *here's a running AWS environment, now tell me what's wrong with it before an attacker finds it first.* That's a new kind of thinking for me and honestly it clicked in a way I didn't expect.
+This lab was different from the previous ones. Until now everything was either "you're the attacker" or "here are the logs, find what happened." This one was more like  *here's a running AWS environment, now tell me what's wrong with it before an attacker finds it first.* That's a new kind of thinking for me and honestly it clicked in a way I didn't expect.
 
 ---
 
 ## What is This Lab Even About?
 
-So the lab is about **AWS Security Hub** and something called **CSPM** — Cloud Security Posture Management. When I first read that I had no idea what "posture" meant in security context. After going through the lab I get it now.
+So the lab is about **AWS Security Hub** and something called **CSPM**  Cloud Security Posture Management. When I first read that I had no idea what "posture" meant in security context. After going through the lab I get it now.
 
 **Posture basically means: how does your cloud environment look from a security perspective right now?**
 
-Think of it like a doctor checking your health. GuardDuty (from the previous lab) is like a doctor that calls you when you're already sick. Security Hub CSPM is like a doctor that checks everything before you get sick and says "hey you're not eating right, this will cause a problem later." It finds misconfigurations — things that aren't broken yet but will be exploited if someone finds them.
+Think of it like a doctor checking your health. GuardDuty (from the previous lab) is like a doctor that calls you when you're already sick. Security Hub CSPM is like a doctor that checks everything before you get sick and says "hey you're not eating right, this will cause a problem later." It finds misconfigurations  things that aren't broken yet but will be exploited if someone finds them.
 
 The cool thing I learned: Security Hub doesn't just come up with its own rules. It checks your environment against actual industry security standards like:
 
