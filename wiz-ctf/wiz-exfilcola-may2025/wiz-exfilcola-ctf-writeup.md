@@ -9,11 +9,11 @@
 
 ## Before I Start
 
-This one is different from my PwnedLabs writeups. This wasn't a guided lab — it was an actual CTF competition made by the **Wiz Research team** (yes, that Wiz — the $12 billion cloud security company). They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
+This one is different from my PwnedLabs writeups. This wasn't a guided lab it was an actual CTF competition made by the **Wiz Research team** (yes, that Wiz — the $12 billion cloud security company). They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
 
 I finished it. That still feels a bit unreal honestly.
 
-The format was completely different from PwnedLabs. No step-by-step hints. No "here's what to do next." Just a ransom email from a threat group called FizzShadows saying they stole a startup's secret soda recipe — and five challenges to figure out exactly what happened, how they got in, and how to stop it.
+The format was completely different from PwnedLabs. No step-by-step hints. No "here's what to do next." Just a ransom email from a threat group called FizzShadows saying they stole a startup's secret soda recipe and five challenges to figure out exactly what happened, how they got in, and how to stop it.
 
 The thing I liked most: everything felt like a real incident. Real logs. Real AWS services. Real attacker techniques. By the end you're not just finding flags — you're reconstructing a complete attack story.
 
@@ -26,7 +26,7 @@ A startup called **ExfilCola** received this email:
 > *"We have successfully infiltrated your corporate network and exfiltrated your most valuable data assets. Transfer 75 Bitcoin or we release everything."*
 > — FizzShadows
 
-My job: figure out if the attack actually happened, trace exactly how they got in, what they accessed, and — in the final challenge — actually delete the stolen file from the attacker's own server before it gets leaked.
+My job: figure out if the attack actually happened, trace exactly how they got in, what they accessed, and in the final challenge actually delete the stolen file from the attacker's own server before it gets leaked.
 
 That last part is genuinely one of the coolest things I've done in a lab setting.
 
@@ -37,7 +37,7 @@ That last part is genuinely one of the coolest things I've done in a lab setting
 ### Challenge 1 — "Did They Actually Take It?"
 **Task:** Confirm whether the S3 data exfiltration actually happened. Find the IAM role used in the attack.
 
-**What I had access to:** A SQLite terminal with S3 data event logs from CloudTrail (this was a cool format — querying real CloudTrail logs using SQL)
+**What I had access to:** A SQLite terminal with S3 data event logs from CloudTrail (this was a cool format querying real CloudTrail logs using SQL)
 
 **My approach:**
 
@@ -225,11 +225,11 @@ This CTF had **none of that structure**. You get a scenario and 5 blank terminal
 
 That gap between guided lab and real CTF is significant. Some of the things that helped me:
 
-- Doing the PwnedLabs labs first (especially Breach in the Cloud and IAM Enumeration — those patterns came up directly here)
-- Thinking in timelines — cloud attacks have a sequence. Find the sequence.
+- Doing the PwnedLabs labs first (especially Breach in the Cloud and IAM Enumeration those patterns came up directly here)
+- Thinking in timelines cloud attacks have a sequence. Find the sequence.
 - When stuck: look at what changed just before the suspicious event, not just the event itself
 
-The Lambda angle in Challenge 3 was the hardest because nothing in my previous labs covered Lambda as an attack vector. I had to think about it differently: "what events happened RIGHT BEFORE Moe started acting suspiciously?" — that's what led me to the `UpdateFunctionCode` event.
+The Lambda angle in Challenge 3 was the hardest because nothing in my previous labs covered Lambda as an attack vector. I had to think about it differently: "what events happened RIGHT BEFORE Moe started acting suspiciously?" that's what led me to the `UpdateFunctionCode` event.
 
 ---
 
@@ -303,4 +303,4 @@ The thing I keep noticing: every attack I study traces back to the same set of m
 - [My Certificate](https://www.cloudhuntinggames.com/certificate/exfilcola/be12e654-a13f-4c41-bad3-dbfcef21907e)
 
 ---
-
+Thanks for reading!!
