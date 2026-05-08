@@ -9,14 +9,15 @@
 
 ## Before I Start
 
-This one is different from my PwnedLabs writeups. This wasn't a guided lab it was an actual CTF competition made by the **Wiz Research team** (yes, that Wiz — the $12 billion cloud security company). They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
+This one is different from my PwnedLabs writeups. This wasn't a guided lab it was an actual CTF competition made by the **Wiz Research team** (yes, that Wiz the $12 billion cloud security company). They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
 
 I finished it. That still feels a bit unreal honestly.
 
 The format was completely different from PwnedLabs. No step-by-step hints. No "here's what to do next." Just a ransom email from a threat group called FizzShadows saying they stole a startup's secret soda recipe and five challenges to figure out exactly what happened, how they got in, and how to stop it.
 
-The thing I liked most: everything felt like a real incident. Real logs. Real AWS services. Real attacker techniques. By the end you're not just finding flags — you're reconstructing a complete attack story.
+The thing I liked most everything felt like a real incident. Real logs. Real AWS services. Real attacker techniques. By the end you're not just finding flags  you're reconstructing a complete attack story.
 
+Totally there are 5 challenges!!
 ---
 
 ## The Scenario
