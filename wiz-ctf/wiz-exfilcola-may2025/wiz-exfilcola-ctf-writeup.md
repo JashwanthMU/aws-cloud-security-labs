@@ -3,7 +3,6 @@
 **Tags:** `AWS` `CloudTrail` `S3` `IAM` `Lambda` `EC2` `SQL` `Incident Response` `Forensics`  
 **Date :** May 2026  
 **Certificate:** [View Mine](https://www.cloudhuntinggames.com/certificate/exfilcola/be12e654-a13f-4c41-bad3-dbfcef21907e)  
-**My GitHub:** [JashwanthMU](https://github.com/JashwanthMU)
 
 ---
 
