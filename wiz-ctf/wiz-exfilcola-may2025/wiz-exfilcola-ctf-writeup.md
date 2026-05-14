@@ -3,13 +3,12 @@
 **Tags:** `AWS` `CloudTrail` `S3` `IAM` `Lambda` `EC2` `SQL` `Incident Response` `Forensics`  
 **Date :** May 2026  
 **Certificate:** [View Mine](https://www.cloudhuntinggames.com/certificate/exfilcola/be12e654-a13f-4c41-bad3-dbfcef21907e)  
-**My GitHub:** [JashwanthMU](https://github.com/JashwanthMU)
 
 ---
 
 ## Before I Start
 
-This one is different from my PwnedLabs writeups. This wasn't a guided lab it was an actual CTF competition made by the **Wiz Research team** (yes, that Wiz the $12 billion cloud security company). They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
+This one is different from my PwnedLabs writeups. This wasn't a guided lab it was an actual CTF competition made by the **Wiz Research team**. They released it publicly in May 2025 and thousands of security professionals attempted it worldwide.
 
 I finished it. That still feels a bit unreal honestly.
 
